@@ -9,12 +9,10 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button zero, one, two, three, four, five, six, seven, eight, nine, modulo, clear, del, div, mul, sub, add, equal, dot, root;
+    Button zero, one, two, three, four, five, six, seven, eight, nine, remainder, clear, del, div, mul, sub, add, equal, dot, root;
     TextView tvTop, tvBottom;
     double firstNum, secondNum, result;
     char op;
-    boolean rooted = false;
-    String printResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         seven = findViewById(R.id.seven);
         eight = findViewById(R.id.eight);
         nine = findViewById(R.id.nine);
-        modulo = findViewById(R.id.modulo);
+        remainder = findViewById(R.id.remainder);
         clear = findViewById(R.id.clear);
         del = findViewById(R.id.del);
         div = findViewById(R.id.div);
@@ -49,40 +47,48 @@ public class MainActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstNum = Double.parseDouble(tvBottom.getText().toString());
-                op = '+';
-                tvTop.setText(String.valueOf(firstNum) + op);
-                tvBottom.setText("");
+                if(tvBottom.getText().length() > 0) {
+                    firstNum = Double.parseDouble(tvBottom.getText().toString());
+                    op = '+';
+                    tvTop.setText(String.valueOf(firstNum) + op);
+                    tvBottom.setText("");
+                }
             }
         });
 
         sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstNum = Double.parseDouble(tvBottom.getText().toString());
-                op = '-';
-                tvTop.setText(String.valueOf(firstNum) + op);
-                tvBottom.setText("");
+                if(tvBottom.getText().length() > 0) {
+                    firstNum = Double.parseDouble(tvBottom.getText().toString());
+                    op = '-';
+                    tvTop.setText(String.valueOf(firstNum) + op);
+                    tvBottom.setText("");
+                }
             }
         });
 
         mul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstNum = Double.parseDouble(tvBottom.getText().toString());
-                op = '*';
-                tvTop.setText(String.valueOf(firstNum) + 'x');
-                tvBottom.setText("");
+                if(tvBottom.getText().length() > 0) {
+                    firstNum = Double.parseDouble(tvBottom.getText().toString());
+                    op = '*';
+                    tvTop.setText(String.valueOf(firstNum) + 'x');
+                    tvBottom.setText("");
+                }
             }
         });
 
         div.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstNum = Double.parseDouble(tvBottom.getText().toString());
-                op = '/';
-                tvTop.setText(String.valueOf(firstNum) + '÷');
-                tvBottom.setText("");
+                if(tvBottom.length() > 0) {
+                    firstNum = Double.parseDouble(tvBottom.getText().toString());
+                    op = '/';
+                    tvTop.setText(String.valueOf(firstNum) + '÷');
+                    tvBottom.setText("");
+                }
             }
         });
 
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(tvBottom.getText().toString().length() > 0) {
+                if(tvBottom.getText().length() > 0) {
                     secondNum = Double.parseDouble(tvBottom.getText().toString());
 
                     switch (op) {
@@ -108,19 +114,14 @@ public class MainActivity extends AppCompatActivity {
                             result = firstNum / secondNum;
                             op = '÷';
                             break;
+                        case '%':
+                            result = firstNum % secondNum;
+                            op = '%';
+                            break;
                     }
 
-                    if(rooted){
-                        firstNum = Double.parseDouble(tvBottom.getText().toString().substring(1));
-                        result = firstNum;
-                        String printSqrt = Double.toString(result);
-
-                        tvTop.setText("√" + printSqrt);
-                        tvBottom.setText(printSqrt);
-                    }else {
                         tvTop.setText(Double.toString(firstNum)+op+Double.toString(secondNum));
                         tvBottom.setText(Double.toString(result));
-                    }
 
                 }
 
@@ -151,9 +152,22 @@ public class MainActivity extends AppCompatActivity {
         root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!tvBottom.getText().toString().contains("√")) {
-                    tvBottom.setText("√");
-                    rooted = true;
+                if(tvBottom.getText().length() > 0) {
+                    double root = Math.sqrt(Double.parseDouble(tvBottom.getText().toString()));
+                    tvTop.setText("√" + tvBottom.getText().toString());
+                    tvBottom.setText(Double.toString(root));
+                }
+            }
+        });
+
+        remainder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(tvBottom.length() > 0) {
+                    firstNum = Double.parseDouble(tvBottom.getText().toString());
+                    op = '%';
+                    tvTop.setText(String.valueOf(firstNum) + '%');
+                    tvBottom.setText("");
                 }
             }
         });
